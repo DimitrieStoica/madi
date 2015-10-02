@@ -13,8 +13,7 @@ index=0
 
 for i in ${searchWiFiAdapter[@]}
 do
-  if [ "$i" = "${value}" ] 
-  then
+  if [ "$i" = "${value}" ]; then
     WiFiAdapters=( "${WiFiAdapters[@]}" "${searchWiFiAdapter[$[$index + 1]]}")
   fi 
   index="$[$index + 1]"
@@ -24,5 +23,17 @@ printf "${WiFiAdapters[@]}\n"
 
 for i in ${WiFiAdapters[@]}
 do
-  echo `ip link show ${WiFiAdapters[$i]}`
+  value=(`ip link show ${WiFiAdapters[$i]} | grep DOWN`)
+  if [ -n "$value" ]; then
+    echo "${WiFiAdapters[$i]} not used"
+    `sudo ip link set ${WiFiAdapters[$i]} up`
+    value=(`ip link show ${WiFiAdapters[$i]} | grep UP`)
+    if [ -n "$value" ]; then
+      echo "${WiFiAdapters[$i]} successfully started"
+    else
+      echo "${WiFiAdapters[$i]} error starting"
+    fi
+  else
+    echo "${WiFiAdapters[$i]} used"
+fi
 done
