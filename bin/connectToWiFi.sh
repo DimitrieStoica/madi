@@ -30,6 +30,9 @@ do
     value=(`ip link show ${WiFiAdapters[$i]} | grep UP`)
     if [ -n "$value" ]; then
       echo "${WiFiAdapters[$i]} successfully started"
+      if [ "`iw ${WiFiAdapters[$i]} link`" == "Not connected." ]; then
+      echo "I can connect now"
+      fi
     else
       echo "${WiFiAdapters[$i]} error starting"
     fi
