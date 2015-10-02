@@ -22,3 +22,7 @@ done
 
 printf "${WiFiAdapters[@]}\n"
 
+for i in ${WiFiAdapters[@]}
+do
+  echo `ip link show ${WiFiAdapters[$i]}`
+done
