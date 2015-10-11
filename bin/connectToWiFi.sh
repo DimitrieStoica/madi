@@ -2,41 +2,29 @@
 
 echo "Looking for available Wifi adapters"
 
-#command that prints all the available internet adapters and further information
-searchWiFiAdapter=(`iw dev`)
+#takes all the available WiFi adapters
+searchWiFiAdapter=(`iw dev | grep "Interface" | awk '{print $2}'`)
 
-#array that stores names of internet adapters
-WiFiAdapters=()
+#loops over all the WiFi adapters and finds if they are busy or not
+#if the adapter is not busy it will start it
 
-value="Interface"
-index=0
-
-for i in ${searchWiFiAdapter[@]}
+for element in "${searchWiFiAdapter[@]}"
 do
-  if [ "$i" = "${value}" ]; then
-    WiFiAdapters=( "${WiFiAdapters[@]}" "${searchWiFiAdapter[$[$index + 1]]}")
-  fi 
-  index="$[$index + 1]"
-done
-
-printf "${WiFiAdapters[@]}\n"
-
-for i in ${WiFiAdapters[@]}
-do
-  value=(`ip link show ${WiFiAdapters[$i]} | grep DOWN`)
+  value=(`ip link show $element | grep DOWN`)
   if [ -n "$value" ]; then
-    echo "${WiFiAdapters[$i]} not used"
-    `sudo ip link set ${WiFiAdapters[$i]} up`
-    value=(`ip link show ${WiFiAdapters[$i]} | grep UP`)
+    echo "$element not used"
+    `sudo ip link set $element up`
+    value=(`ip link show $element | grep UP`)
     if [ -n "$value" ]; then
-      echo "${WiFiAdapters[$i]} successfully started"
-      if [ "`iw ${WiFiAdapters[$i]} link`" == "Not connected." ]; then
-      echo "I can connect now"
+      echo "$element successfully started"
+      if [ "`iw $element link`" == "Not connected." ]; then
+      echo "$element can connect now"
       fi
     else
-      echo "${WiFiAdapters[$i]} error starting"
+      echo "$element error starting"
     fi
   else
-    echo "${WiFiAdapters[$i]} used"
+    echo "$element used"
 fi
 done
+
