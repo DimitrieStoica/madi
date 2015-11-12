@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#define array containing the available WiFi adapters
+WiFiAdapters=();
+
 echo "Looking for available Wifi adapters"
 
 #takes all the available WiFi adapters
@@ -19,6 +22,7 @@ do
       echo "$element successfully started"
       if [ "`iw $element link`" == "Not connected." ]; then
       echo "$element can connect now"
+      WiFiAdapters=("${WiFiAdapters[@]}" "$element")
       fi
     else
       echo "$element error starting"
@@ -28,3 +32,4 @@ do
 fi
 done
 
+echo "${WiFiAdapters[@]}" > listWiFiInterfaces
