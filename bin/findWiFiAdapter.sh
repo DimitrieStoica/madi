@@ -33,3 +33,5 @@ fi
 done
 
 echo "${WiFiAdapters[@]}" > listWiFiInterfaces
+
+./setUpWireless.sh
