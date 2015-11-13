@@ -17,7 +17,7 @@ while read line; do
   #find the number of elements in the respetive line
   numberWiFiInterface=${#listWiFi[*]}
   WiFi=${listWiFi[$((RANDOM%numberWiFiInterface))]}
-  echo "$WiFi will be used"
+  echo "$WiFi will be used for setting up a connection"
 done < $listFileWiFi
 IFS=$OIFS;
 
@@ -37,3 +37,22 @@ method=auto
 
 [ipv4]
 method=shared" > $name
+
+chmod 600 $name
+`sudo cp $name /etc/NetworkManager/system-connections/`
+`sudo /etc/init.d/networking restart`
+
+until  `nmcli con up id $name iface $WiFi`
+do
+  echo "Trying again"
+  echo -ne '#####                     (20%)\r'
+  sleep 2
+  echo -ne '##########                (40%)\r'
+  sleep 2
+  echo -ne '###############           (60%)\r'
+  sleep 2
+  echo -ne '####################      (80%)\r'
+  sleep 2
+  echo -ne '######################### (100%)\r'
+  echo -ne '\n'
+done
