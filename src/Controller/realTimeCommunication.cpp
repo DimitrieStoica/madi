@@ -16,7 +16,7 @@ class realTimeCommunication {
   int startClient() {
     cout << "Client will connect shortly." << endl;
     Client *client = new Client();
-    client -> getData("127.0.0.1", "4658");
+    client -> getData("./test", "127.0.0.1", "4658");
     return 0;
   };
 };
