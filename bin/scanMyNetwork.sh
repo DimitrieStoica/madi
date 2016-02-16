@@ -9,7 +9,7 @@ then
   #it cleans old entries
   rm $FILE
   #it scans for available nodes in the network
-  echo `sudo arp-scan --interface=eth0 --localnet | awk 'FNR > 2 {print $1 " " $2}' | head -n -3` >> availableNetworkNodes
+  echo `sudo arp-scan --interface=eth0 --localnet | awk 'FNR > 2 {print $1 " " $2}' | head -n -3` >> $FILE
 else
-  echo `sudo arp-scan --interface=eth0 --localnet | awk 'FNR > 2 {print $1 " " $2}' | head -n -3` >> availableNetworkNodes
+  echo `sudo arp-scan --interface=eth0 --localnet | awk 'FNR > 2 {print $1 " " $2}' | head -n -3` >> $FILE 
 fi
