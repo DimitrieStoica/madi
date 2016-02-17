@@ -1,5 +1,5 @@
-#include "Sockets/Server/server.cpp"
-#include "Sockets/Client/client.cpp"
+#include "sockets/server/server.cpp"
+#include "sockets/client/client.cpp"
 
 using namespace std;
 

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Controller/realTimeCommunication.cpp"
+#include "controller/realTimeCommunication.cpp"
 #include "bin/networkManagement.cpp"
 
 using namespace std;
