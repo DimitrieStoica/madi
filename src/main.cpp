@@ -13,6 +13,7 @@ int main() {
   networkManagement *nm = new networkManagement();
   nm -> setUpWAN("robotino");
   nm -> connectToWAN("robotino");
+  nm -> scanNetworkWAN("robotino");
 
   cout << "....................." << endl;
   cout << "Starting communication" << endl;

@@ -62,9 +62,6 @@ class networkManagement{
     createWANfile *cwf = new createWANfile();
 
     vector <string> resultVector = searchForNetworkHardware();
-    cout << resultVector.size() << endl;
-    cout << resultVector[1] << endl;
-    cout << resultVector[0] << endl;
     string str;
 
     for (int i=0; i < resultVector.size(); i++) { 
@@ -76,6 +73,24 @@ class networkManagement{
         co -> getOutputFromConsole("nmcli d wifi connect " + myName);
       } else {
         cout << "Hardware is busy for a WAN connection" << endl;
+      };
+    };
+    return 0;
+  };
+
+  int scanNetworkWAN(string myName) {
+    consoleOutput *co  = new consoleOutput();
+
+    vector <string> resultVector = searchForNetworkHardware();
+    string str;
+
+    for (int i=0; i < resultVector.size(); i++) {
+      str = co -> getOutputFromConsole("iwconfig | grep " + resultVector[i]);
+      if (str.find(myName) != string::npos) {
+        str = co -> getOutputFromConsole("sudo arp-scan --interface=" + resultVector[i] + " --localnet | awk 'FNR > 2 {print $1 \" \" $2}' | head -n -3");
+        cout << str << endl;
+      } else {
+        cout << "Not connected to WAN" << endl;
       };
     };
     return 0;
