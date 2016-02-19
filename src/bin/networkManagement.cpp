@@ -2,6 +2,7 @@
 #include <vector>
 #include <cstdlib>
 #include "Helpers/createWANfile.cpp"
+#include "Helpers/identifyNetworkHardware.cpp"
 
 using namespace std;
 
@@ -9,28 +10,13 @@ class networkManagement{
 
   public: 
 
-  vector <string> searchForNetworkHardware() {
-    consoleOutput *co  = new consoleOutput();
-    createWANfile *cwf = new createWANfile();
-
-    string word;
-    vector <string> resultVector;
-
-    string str = co -> getOutputFromConsole("iw dev | grep \"Interface\" | awk '{print $2}'");
-    istringstream stm(str);
-
-    while(stm >> word) {
-      resultVector.push_back(word);
-    };
-
-    return resultVector;
-  };
-
   int setUpWAN(string myName) {
-    consoleOutput *co  = new consoleOutput();
-    createWANfile *cwf = new createWANfile();
 
-    vector <string> resultVector = searchForNetworkHardware();
+    consoleOutput *co            = new consoleOutput();
+    createWANfile *cwf           = new createWANfile();
+    identifyNetworkHardware *inh = new identifyNetworkHardware();
+
+    vector <string> resultVector = inh -> searchForNetworkHardware();
     string str;
 
     for (int i=0; i < resultVector.size(); i++) {
@@ -58,10 +44,12 @@ class networkManagement{
   };
 
   int connectToWAN(string myName) {
-    consoleOutput *co  = new consoleOutput();
-    createWANfile *cwf = new createWANfile();
 
-    vector <string> resultVector = searchForNetworkHardware();
+    consoleOutput *co            = new consoleOutput();
+    createWANfile *cwf           = new createWANfile();
+    identifyNetworkHardware *inh = new identifyNetworkHardware();
+
+    vector <string> resultVector = inh -> searchForNetworkHardware();
     string str;
 
     for (int i=0; i < resultVector.size(); i++) { 
