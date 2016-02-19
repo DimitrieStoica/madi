@@ -4,11 +4,12 @@
 #include <ctime>
 
 using boost::asio::ip::tcp;
+using namespace std;
 
 class Server {
   public:
 
-  int CreateServer(int port) {
+  int CreateServer(int port, char* data, int dataSize) {
     try
     {
       //define io_service
@@ -30,12 +31,7 @@ class Server {
         boost::system::error_code ignored_error;
 
         //responding to client
-        for ( int x = 0; x < 20; x++ ) {
-
-          std::string message = "Hello from server " + std::to_string(x) + "\n";
-          boost::asio::write(socket, boost::asio::buffer(message), ignored_error);
-          usleep(1000000);
-        }
+        boost::asio::write(socket, boost::asio::buffer(data, dataSize), ignored_error);
       }
     }
     catch (std::exception& e)
