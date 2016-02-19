@@ -9,6 +9,9 @@ int main() {
 
   cout << "System started" << endl;
   //dynamic object creation to improve performance and memory usage
+ 
+  cout << "....................." << endl;
+  cout << "Setting up network" << endl;
 
   networkManagement *nm = new networkManagement();
   nm -> setUpWAN("robotino");
@@ -21,12 +24,6 @@ int main() {
   realTimeCommunication *rtc = new realTimeCommunication();  
   rtc -> startServer();
   rtc -> startClient();
-
-  cout << "....................." << endl;
-  cout << "Reading from database" << endl;
-
-  myDatabase *mdb = new myDatabase();
-  mdb -> readAllFromDatabase("./test");
 
   return 0;
 };

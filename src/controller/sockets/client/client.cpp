@@ -1,8 +1,6 @@
 #include <iostream>
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
-#include "../../database/database.cpp"
-#include <chrono> 
 #include <stdio.h>
 
 using boost::asio::ip::tcp;
@@ -11,9 +9,7 @@ using namespace std;
 class Client {
   public:
 
-  int getData(string myDatabaseName, string ip, string port) {
-    myDatabase *mdb = new myDatabase();
-
+int getData(string ip, string port) {
   try
   {
     // the user should specify the server - the 2nd argument
@@ -43,11 +39,7 @@ class Client {
       // the size of the array to help prevent buffer overruns.
       size_t len = socket.read_some(boost::asio::buffer(buf), error);
 
-      cout << "Writing to database" << endl;
-
-      std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
-      auto duration = now.time_since_epoch();
-      mdb -> writeToDatabase(myDatabaseName, to_string(duration.count()), buf.data());
+      cout  << buf.data() << endl;
 
       //if connection closed by server return error
       if (error == boost::asio::error::eof)
