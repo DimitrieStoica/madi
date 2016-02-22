@@ -12,10 +12,8 @@ class Server {
   int CreateServer(int port, char* data, int dataSize) {
     try
     {
-      //define io_service
       boost::asio::io_service io_service;
 
-      //acceptor object needs to be created to listen for new connections
       tcp::acceptor acceptor(io_service, tcp::endpoint(tcp::v4(), port));
 
       for (;;)
@@ -26,11 +24,9 @@ class Server {
         //wait and listen
         acceptor.accept(socket);
 
-        //prepare message to send back to client
-
         boost::system::error_code ignored_error;
 
-        //responding to client
+        //responds to client
         boost::asio::write(socket, boost::asio::buffer(data, dataSize), ignored_error);
       }
     }
@@ -38,7 +34,6 @@ class Server {
     {
       std::cerr << e.what() << std::endl;
     }
-
     return 0;
   };
 };
