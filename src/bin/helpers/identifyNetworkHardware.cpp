@@ -9,13 +9,12 @@ class identifyNetworkHardware {
     string word;
     vector <string> resultVector;
 
-    string str = co -> getOutputFromConsole("iw dev | grep \"Interface\" | awk '{print $2}'");
+    string str = co -> getOutputFromConsole("ifconfig | grep wlan | awk '{print $1}'");
     istringstream stm(str);
 
     while(stm >> word) {
       resultVector.push_back(word);
     };
-
     return resultVector;
   };
 };

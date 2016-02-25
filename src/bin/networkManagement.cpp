@@ -19,10 +19,10 @@ class networkManagement {
 
     for (int i=0; i < resultVector.size(); i++) {
 
-      cout << resultVector[i] << endl;
       str = co -> getOutputFromConsole("iw " + resultVector[i] + " link");
+
       if (str.find("Not connected.") != string::npos) {
-        cout << resultVector[i] + " is free and can be used for setting up a WAN connection" << endl;
+        cout << resultVector[i] + " is trying to set up a WAN connection" << endl;
 
         cwf -> writeToFile(resultVector[i], "robotino");
 
@@ -30,14 +30,15 @@ class networkManagement {
         co -> getOutputFromConsole("sudo cp " + myName + " /etc/NetworkManager/system-connections/");
         co -> getOutputFromConsole("sudo rm " + myName);
         co -> getOutputFromConsole("sudo /etc/init.d/networking restart");
-        co -> getOutputFromConsole("nmcli con up id " + myName + " iface " + resultVector[i]);
-      
-      } else {
-        cout << "Hardware is busy for a WAN connection" << endl;
-        return 1;
+        str = co -> getOutputFromConsole("nmcli con up id " + myName + " iface " + resultVector[i]);
+        if ( str.find("Error") == string::npos) {
+          cout << "Setting up the connection was succesful." << endl;
+          return 0;
+        };
       };
     };
-    return 0;
+    cout << str << endl;
+    return 1;
   };
 
   int connectToWAN(string myName) {
