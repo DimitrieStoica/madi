@@ -16,8 +16,6 @@ class Server {
 
       tcp::acceptor acceptor(io_service, tcp::endpoint(tcp::v4(), port));
 
-      for (;;)
-      {
         //creates a socket
         tcp::socket socket(io_service);
 
@@ -28,7 +26,6 @@ class Server {
 
         //responds to client
         boost::asio::write(socket, boost::asio::buffer(data, dataSize), ignored_error);
-      }
     }
     catch (std::exception& e)
     {
