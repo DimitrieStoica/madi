@@ -1,6 +1,6 @@
 #include <iostream>
-#include "controller/realTimeCommunication.cpp"
 #include "bin/networkManagement.cpp"
+#include "bin/networkScanManagement.cpp"
 
 using namespace std;
 
@@ -16,14 +16,12 @@ int main() {
   networkManagement *nm = new networkManagement();
   nm -> setUpWAN("robotino");
   nm -> connectToWAN("robotino");
-  nm -> scanNetworkWAN("robotino");
 
   cout << "....................." << endl;
-  cout << "Starting communication" << endl;
+  cout << "Starting identification process" << endl;
 
-  realTimeCommunication *rtc = new realTimeCommunication();  
-  rtc -> startServer();
-  rtc -> startClient();
+  networkScanManagement *nsm = new networkScanManagement();
+  nsm -> updateNetworkData(2509);
 
   return 0;
 };
