@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include "helpers/createWANfile.cpp"
 #include "helpers/identifyNetworkHardware.cpp"
+#include <unistd.h>
 
 class networkManagement {
 
@@ -30,7 +31,8 @@ class networkManagement {
         co -> getOutputFromConsole("sudo cp " + myName + " /etc/NetworkManager/system-connections/");
         co -> getOutputFromConsole("sudo rm " + myName);
         co -> getOutputFromConsole("sudo /etc/init.d/networking restart");
-        str = co -> getOutputFromConsole("nmcli con up id " + myName + " iface " + resultVector[i]);
+        usleep(1000000);
+        str = co -> getOutputFromConsole("sudo nmcli con up id " + myName + " iface " + resultVector[i]);
         if ( str.find("Error") == string::npos) {
           cout << "Setting up the connection was succesful." << endl;
           return 0;
@@ -54,7 +56,7 @@ class networkManagement {
       str = co -> getOutputFromConsole("iw " + resultVector[i] + " link");
       if (str.find("Not connected.") != string::npos) {
         cout << resultVector[i] + " is trying to connect to " + myNetworkName << endl;
-        str = co -> getOutputFromConsole("nmcli d wifi connect " + myNetworkName);
+        str = co -> getOutputFromConsole("sudo nmcli d wifi connect " + myNetworkName);
         if ( str.find("Error") == string::npos) {
           cout << "Setting up the connection was succesful." << endl;
           return 0;
