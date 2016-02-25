@@ -6,10 +6,13 @@
 using boost::asio::ip::tcp;
 using namespace std;
 
+using boost::asio::ip::tcp;
+using namespace std;
+
 class Client {
   public:
 
-  vector<char> getData(string ip, string port) {
+  int getData(string ip, int port, vector<char> *buf) {
     try
     {
       boost::asio::io_service io_service;
@@ -29,18 +32,21 @@ class Client {
       //waits until data is available on the socket
       while (!socket.available());
 
-      std::vector<char> buf(socket.available());
+      int n = socket.available();
 
-      boost::asio::read(socket, boost::asio::buffer(buf));
+      buf -> resize(n);
+      std::vector<char> buffer(socket.available());
 
-      return buf;
+      boost::asio::read(socket, boost::asio::buffer(buffer));
+      memcpy(buf -> data(), buffer.data(), n);
+
+      return n;
     }
     // handle any exceptions that may have been thrown.
     catch (std::exception& e)
     {
       std::cerr << e.what() << std::endl;
     }
-    std::vector<char> buf;
-    return buf;
+    return 0;
   };
 };
