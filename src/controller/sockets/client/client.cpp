@@ -20,7 +20,7 @@ class Client {
       // Convert the server name that was specified as a parameter to the application, to a TCP endpoint.
       tcp::resolver resolver(io_service);
 
-      tcp::resolver::query query(ip, port);
+      tcp::resolver::query query(ip, to_string(port));
 
       tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
 
