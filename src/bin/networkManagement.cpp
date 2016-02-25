@@ -41,7 +41,7 @@ class networkManagement {
     return 1;
   };
 
-  int connectToWAN(string myName) {
+  int connectToWAN(string myNetworkName) {
 
     consoleOutput *co            = new consoleOutput();
     createWANfile *cwf           = new createWANfile();
@@ -51,15 +51,17 @@ class networkManagement {
     string str;
 
     for (int i=0; i < resultVector.size(); i++) { 
-      cout << resultVector[i] << endl;
       str = co -> getOutputFromConsole("iw " + resultVector[i] + " link");
       if (str.find("Not connected.") != string::npos) {
-        cout << resultVector[i] + " is free and can be used for setting up a WAN connection" << endl;
-        co -> getOutputFromConsole("nmcli d wifi connect " + myName);
-      } else {
-        cout << "Hardware is busy for a WAN connection" << endl;
+        cout << resultVector[i] + " is trying to connect to " + myNetworkName << endl;
+        str = co -> getOutputFromConsole("nmcli d wifi connect " + myNetworkName);
+        if ( str.find("Error") == string::npos) {
+          cout << "Setting up the connection was succesful." << endl;
+          return 0;
+        };
       };
     };
-    return 0;
+    cout << str << endl;
+    return 1;
   };
 };
