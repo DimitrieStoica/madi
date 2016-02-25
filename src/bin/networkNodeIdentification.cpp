@@ -1,36 +1,52 @@
 #include "../controller/sockets/server/server.cpp"
 #include "../controller/sockets/client/client.cpp"
 
-#include "consoleOutput.cpp"
-#include "Helpers/identifyNetworkHardware.cpp"
-
 using namespace std;
+
+struct InfoNode {
+  char name[64];
+};
 
 class networkNodeIdentification {
   public:
 
-  int identifyServer() {
+  int identifyServer(int port, string myName, string currentWAN) {
     cout << "Identification server will start shorlty." << endl;
 
     identifyNetworkHardware *inh = new identifyNetworkHardware();
+    consoleOutput *co            = new consoleOutput();
     Server *server               = new Server();
 
     vector <string> resultVector = inh -> searchForNetworkHardware();
-    string myName = "alexandru";
-    resultVector = resultVector.push_front(myName);
+    InfoNode infoNodeServer;
 
     for (int i=0; i < resultVector.size(); i++) {
-      vectorSize = strlen(resultVector[i]);
+
+      string strWAN = co -> getOutputFromConsole("iwconfig " + resultVector[i] + " | awk '/ESSID/ {print $4}'");
+      strWAN.erase(std::remove(strWAN.begin(), strWAN.end(), '\n'), strWAN.end());
+
+      if (strWAN.find(currentWAN) != std::string::npos) {
+        strcpy( infoNodeServer.name, myName.c_str());
+        for (;;) {
+          server -> CreateServer(port, (char*)&infoNodeServer, sizeof(InfoNode));
+        };
+      };
     };
 
-    server -> CreateServer(2509, resultVector, vectorSize);
     return 0;
   };
 
-  int identifyClient() {
+  string identifyClient(string ip, int port) {
     cout << "Identification client will connect shortly." << endl;
-    char* data = client -> getData("127.0.0.1", "2509");
-    cout << data << endl;
-    return 0;
+
+    Client *client = new Client();
+
+    InfoNode infoNodeClient;
+    vector<char> buffer;
+
+    int n = client -> getData(ip, port, &buffer);
+    memcpy(&infoNodeClient, buffer.data(), sizeof(InfoNode));
+
+    return string(infoNodeClient.name);
   };
 };
